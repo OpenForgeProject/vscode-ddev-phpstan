@@ -1,0 +1,138 @@
+{
+  "name": "vscode-ddev-phpstan",
+  "displayName": "DDEV PHPStan",
+  "description": "PHP static analysis with PHPStan in DDEV containers for VS Code",
+  "version": "0.1.0",
+  "publisher": "OpenForgeProject",
+  "license": "GPL-3.0",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "php",
+    "phpstan",
+    "ddev",
+    "static-analysis",
+    "quality"
+  ],
+  "activationEvents": [
+    "onLanguage:php"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ddev-phpstan.analyzeCurrentFile",
+        "title": "Analyze Current File",
+        "category": "DDEV PHPStan"
+      },
+      {
+        "command": "ddev-phpstan.debugCurrentFile",
+        "title": "Debug Analysis (Show Raw Output)",
+        "category": "DDEV PHPStan"
+      },
+      {
+        "command": "ddev-phpstan.enable",
+        "title": "Enable",
+        "category": "DDEV PHPStan"
+      },
+      {
+        "command": "ddev-phpstan.disable",
+        "title": "Disable",
+        "category": "DDEV PHPStan"
+      },
+      {
+        "command": "ddev-phpstan.toggle",
+        "title": "Toggle Enable/Disable",
+        "category": "DDEV PHPStan"
+      }
+    ],
+    "configuration": {
+      "title": "DDEV PHPStan",
+      "properties": {
+        "ddev-phpstan.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the DDEV PHPStan extension"
+        },
+        "ddev-phpstan.validateOn": {
+          "type": "string",
+          "enum": [
+            "save",
+            "type"
+          ],
+          "default": "save",
+          "description": "When to validate PHP files"
+        },
+        "ddev-phpstan.level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9,
+          "default": 6,
+          "description": "PHPStan analysis level (0-9, higher is stricter). Level 6 is recommended for most projects. Ignored when configPath is set."
+        },
+        "ddev-phpstan.minSeverity": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "default": "warning",
+          "description": "Minimum severity level for reported issues"
+        },
+        "ddev-phpstan.configPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to custom PHPStan configuration file (relative to workspace root). When set, level and excludePaths settings are ignored."
+        },
+        "ddev-phpstan.excludePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "vendor/",
+            "var/",
+            "cache/",
+            "public/bundles/",
+            "node_modules/",
+            "tests/fixtures/",
+            "migrations/"
+          ],
+          "description": "Paths to exclude from analysis. Ignored when configPath is set."
+        }
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenForgeProject/vscode-ddev-phpstan"
+  },
+  "scripts": {
+    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "compile-tests": "esbuild src/test/*.test.ts --bundle --outdir=dist/test --external:vscode --external:mocha --format=cjs --platform=node",
+    "watch": "npm run compile -- --watch",
+    "package": "npm run compile -- --minify",
+    "vscode:prepublish": "npm run package",
+    "test": "npm run compile-tests && vscode-test",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.100.0",
+    "@types/node": "^18.x",
+    "@types/mocha": "^10.0.9",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vscode/test-cli": "^0.0.10",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.0.0",
+    "mocha": "^10.8.2",
+    "sinon": "^19.0.2",
+    "typescript": "^5.6.3"
+  }
+}
