@@ -1,0 +1,85 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for the DDEV PHPStan extension
+title: "[Feature]: "
+labels: ["enhancement", "feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature! Please fill out the information below to help us understand your request.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Description
+      description: Is your feature request related to a problem? Please describe the problem you're trying to solve.
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see implemented.
+      placeholder: "I would like to see..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Describe any alternative solutions or features you've considered.
+      placeholder: "Alternatively, we could..."
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve my workflow
+        - High - Critical for my use case
+        - Critical - Blocking my work
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: category
+    attributes:
+      label: Feature Category
+      description: What category does this feature fall into? (Select all that apply)
+      options:
+        - label: PHPStan Analysis
+        - label: DDEV Integration
+        - label: VS Code UI/UX
+        - label: Configuration
+        - label: Performance
+        - label: Debugging
+        - label: Documentation
+        - label: Other
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe your specific use case and how this feature would help.
+      placeholder: "In my daily workflow, I..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description: Provide any examples, mockups, or references that might help illustrate your request.
+      placeholder: "For example, similar to how..."
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or information about the feature request.
+      placeholder: "Any additional information..."

@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-09-30
+
+### Added
+
+- **GitHub Workflows**: Complete CI/CD pipeline with automated testing and releases
+  - Multi-platform testing (macOS, Ubuntu, Windows) with Node.js 18.x & 20.x
+  - Automated code quality checks (ESLint, TypeScript compilation, security audit)
+  - Automated release workflow with VS Code Marketplace and Open VSX publishing
+  - Dependabot integration with auto-approve and auto-merge for dependency updates
+- **Community Templates**: Professional issue templates and contribution guidelines
+  - Structured bug report template with version info and reproduction steps
+  - Feature request template with priority and categorization
+  - Comprehensive contributing guidelines with development setup and PR process
+- **Project Infrastructure**: Complete open source project setup
+  - Dependabot configuration for weekly dependency updates
+  - GitHub Actions for continuous integration and deployment
+  - Community health files for better contributor experience
+
+### Improved
+
+- **Development Workflow**: Streamlined development and release process
+- **Code Quality**: Automated linting, testing, and security checks
+- **Community Support**: Clear guidelines for bug reports and feature requests
+- **Release Management**: Automated publishing to extension marketplaces
+
+### Technical Details
+
+- GitHub Actions workflows for CI/CD automation
+- Dependabot for automated dependency management
+- Issue templates using GitHub's YAML format
+- Multi-platform compatibility testing
+- Security vulnerability scanning
+
 ## [0.1.0] - 2025-09-30
 
 ### Added
