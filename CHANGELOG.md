@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-09-30
+
+### Updated
+
+- **Dependencies**: Major dependency updates for improved performance and security
+  - `@types/node`: Updated from 18.19.128 to 24.6.0 (Node.js 24 LTS support)
+  - `esbuild`: Updated from 0.24.2 to 0.25.10 (improved bundling performance)
+  - `mocha`: Updated from 10.8.2 to 11.7.3 (enhanced testing framework)
+  - `sinon`: Updated from 19.0.5 to 21.0.0 (modern mocking capabilities)
+  - `@vscode/test-cli`: Updated from 0.0.10 to 0.0.11 (VS Code testing improvements)
+
+- **GitHub Actions**: Updated to latest versions for better CI/CD performance
+  - `actions/checkout`: Updated from v4 to v5 (Node.js 24 runtime)
+  - `actions/setup-node`: Updated from v4 to v5 (enhanced caching and performance)
+  - `hmarr/auto-approve-action`: Updated from v3 to v4 (Node.js 20 compatibility)
+  - `softprops/action-gh-release`: Updated from v1 to v2 (improved release automation)
+
+### Fixed
+
+- **CI/CD**: Added missing `@vscode/test-electron` dependency for proper VS Code extension testing
+- **Testing**: Resolved dependency conflicts and improved test stability
+
+### Technical Details
+
+- All major testing framework updates maintain backward compatibility
+- Node.js 24 LTS support with improved type definitions
+- Enhanced build performance with latest esbuild version
+- Modernized GitHub Actions for better CI/CD reliability
+
 ## [0.2.0] - 2025-09-30
 
 ### Added
