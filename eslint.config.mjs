@@ -22,6 +22,7 @@ import tsParser from "@typescript-eslint/parser";
 
 export default [{
     files: ["**/*.ts"],
+    ignores: ["esbuild.ts", "dist/**/*", "node_modules/**/*"],
 }, {
     plugins: {
         "@typescript-eslint": typescriptEslint,

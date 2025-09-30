@@ -2,7 +2,7 @@
   "name": "vscode-ddev-phpstan",
   "displayName": "DDEV PHPStan",
   "description": "PHP static analysis with PHPStan in DDEV containers for VS Code",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "OpenForgeProject",
   "license": "GPL-3.0",
   "engines": {
@@ -114,18 +114,18 @@
     "url": "https://github.com/OpenForgeProject/vscode-ddev-phpstan"
   },
   "scripts": {
-    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "compile-tests": "esbuild src/test/*.test.ts --bundle --outdir=dist/test --external:vscode --external:mocha --format=cjs --platform=node",
-    "watch": "npm run compile -- --watch",
-    "package": "npm run compile -- --minify",
+    "compile": "tsx esbuild.ts",
+    "compile-tests": "tsx esbuild.ts",
+    "watch": "tsx esbuild.ts --watch",
+    "package": "tsx esbuild.ts --production",
     "vscode:prepublish": "npm run package",
     "test": "npm run compile-tests && vscode-test",
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
-    "@types/node": "^24.x",
     "@types/mocha": "^10.0.9",
+    "@types/node": "^24.x",
+    "@types/vscode": "^1.100.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vscode/test-cli": "^0.0.11",
@@ -136,6 +136,7 @@
     "mocha": "^11.7.3",
     "ovsx": "^0.9.0",
     "sinon": "^21.0.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.6.3"
   }
 }

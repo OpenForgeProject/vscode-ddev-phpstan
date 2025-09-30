@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-09-30
+
+### Changed
+
+- **Build System**: Complete migration from JavaScript to TypeScript for build configuration
+  - `esbuild.js` → `esbuild.ts`: Build configuration now fully typed with TypeScript interfaces
+  - Added `tsx` dependency for direct TypeScript execution without compilation step
+  - Updated npm scripts to use `tsx` for running TypeScript files directly
+  - Cleaned up duplicate and legacy JavaScript build files
+
+### Improved
+
+- **Type Safety**: Enhanced type safety across build infrastructure with proper TypeScript interfaces
+- **Developer Experience**: Better IntelliSense and error detection in build configuration
+- **Code Quality**: Significantly reduced JavaScript percentage in source files
+- **Build Performance**: Streamlined build process with modern TypeScript tooling
+
+### Technical Details
+
+- Source code is now primarily TypeScript (11 TypeScript files vs 2 configuration files)
+- Only `eslint.config.mjs` and `.vscode-test.mjs` remain as JavaScript (tooling requirements)
+- All build and development workflows use native TypeScript execution via `tsx`
+- Enhanced type annotations for esbuild plugins and configuration objects
+- Maintained full backward compatibility with existing functionality
+
 ## [0.3.0] - 2025-09-30
 
 ### Updated

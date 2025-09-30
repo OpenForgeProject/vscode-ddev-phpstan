@@ -17,34 +17,33 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-const esbuild = require("esbuild");
+import * as esbuild from 'esbuild';
 
-const production = process.argv.includes('--production');
-const watch = process.argv.includes('--watch');
+const production: boolean = process.argv.includes('--production');
+const watch: boolean = process.argv.includes('--watch');
 
-/**
- * @type {import('esbuild').Plugin}
- */
-const esbuildProblemMatcherPlugin = {
+const esbuildProblemMatcherPlugin: esbuild.Plugin = {
 	name: 'esbuild-problem-matcher',
 
-	setup(build) {
+	setup(build: esbuild.PluginBuild): void {
 		build.onStart(() => {
 			console.log('[watch] build started');
 		});
-		build.onEnd((result) => {
+		build.onEnd((result: esbuild.BuildResult) => {
 			result.errors.forEach(({ text, location }) => {
 				console.error(`✘ [ERROR] ${text}`);
-				console.error(`    ${location.file}:${location.line}:${location.column}:`);
+				if (location) {
+					console.error(`    ${location.file}:${location.line}:${location.column}:`);
+				}
 			});
 			console.log('[watch] build finished');
 		});
 	},
 };
 
-async function main() {
+async function main(): Promise<void> {
 	// Build extension
-	const extensionCtx = await esbuild.context({
+	const extensionCtx: esbuild.BuildContext = await esbuild.context({
 		entryPoints: ['src/extension.ts'],
 		bundle: true,
 		format: 'cjs',
@@ -59,7 +58,7 @@ async function main() {
 	});
 
 	// Build tests
-	const testCtx = await esbuild.context({
+	const testCtx: esbuild.BuildContext = await esbuild.context({
 		entryPoints: ['src/test/*.test.ts'],
 		bundle: true,
 		format: 'cjs',
@@ -72,6 +71,7 @@ async function main() {
 		logLevel: 'silent',
 		plugins: [esbuildProblemMatcherPlugin],
 	});
+
 	if (watch) {
 		await Promise.all([
 			extensionCtx.watch(),
@@ -85,7 +85,7 @@ async function main() {
 	}
 }
 
-main().catch(e => {
+main().catch((e: Error) => {
 	console.error(e);
 	process.exit(1);
 });
