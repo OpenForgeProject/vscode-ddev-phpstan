@@ -45,10 +45,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish to VS Code Marketplace
-      if: ${{ secrets.VSCE_PAT }}
-      run: npx @vscode/vsce publish --pat ${{ secrets.VSCE_PAT }}
+    # Publishing to marketplaces requires secrets to be configured
+    # VSCE_PAT and OVSX_PAT need to be added as repository secrets
+    # Uncomment and configure these steps when ready to publish
+    
+    # - name: Publish to VS Code Marketplace
+    #   run: npx @vscode/vsce publish --pat ${{ secrets.VSCE_PAT }}
+    #   if: secrets.VSCE_PAT != null
 
-    - name: Publish to Open VSX Registry
-      if: ${{ secrets.OVSX_PAT }}
-      run: npx ovsx publish *.vsix --pat ${{ secrets.OVSX_PAT }}
+    # - name: Publish to Open VSX Registry
+    #   run: npx ovsx publish *.vsix --pat ${{ secrets.OVSX_PAT }}
+    #   if: secrets.OVSX_PAT != null
