@@ -1,0 +1,49 @@
+# This file is part of the vscode-ddev-phpstan extension.
+# © OpenForgeProject
+# Licensed under the GNU General Public License v3.0 (GPL-3.0)
+
+# Build and development files
+src/**/*.ts
+esbuild.ts
+tsconfig.json
+eslint.config.mjs
+.vscode-test.mjs
+
+# Test files
+.vscode-test/**
+**/*.test.js
+**/*.test.ts
+
+# Development tools
+.trunk/**
+.vscode/**
+.github/**
+
+# Node modules and dependencies
+node_modules/**
+package-lock.json
+
+# Git files
+.git/**
+.gitignore
+
+# Logs and temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.idea/**
+.DS_Store
+Thumbs.db
+
+# Build artifacts (keep only dist/)
+# All other build outputs should be ignored

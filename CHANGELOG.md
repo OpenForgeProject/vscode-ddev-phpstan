@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2025-10-01
+
+### Added
+
+- **Publishing Preparation**: Complete setup for VS Code Marketplace and Open VSX Registry
+  - Added `.vscodeignore` file to exclude development files from extension package
+  - Added publishing scripts for both VS Code Marketplace (`publish:vscode`) and Open VSX Registry (`publish:ovsx`)
+  - Optimized package size by excluding source files, build tools, and development dependencies
+  - Package size reduced to 155.64 KB with only essential runtime files
+
+### Improved
+
+- **Package Quality**: Enhanced extension package with proper file exclusions
+- **Distribution**: Ready for automated publishing via GitHub Actions
+- **Developer Experience**: Clear publishing workflow with npm scripts
+
+### Technical Details
+
+- Extension package now includes only: compiled JavaScript, assets, documentation, and license
+- Source TypeScript files excluded from distribution package
+- Build tools and configuration files excluded from package
+- Maintained full functionality while reducing package size
+- GitHub Actions ready for automated marketplace publishing
+
 ## [0.4.0] - 2025-09-30
 
 ### Changed
