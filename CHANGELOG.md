@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2025-10-01
+
+### Changed
+
+- **GitHub Actions**: Updated workflows to use dynamic Node.js version tags
+  - CI tests now use `lts/*` and `latest` instead of specific versions (20.x, 22.x)
+  - Release workflow uses `lts/*` for stability instead of latest
+  - Automatic adaptation to new Node.js versions without manual updates
+
+### Improved
+
+- **Release Process**: Enhanced GitHub release workflow with custom changelog extraction
+  - Automatic extraction of version-specific changelog content for releases
+  - Improved version handling and release naming
+  - Better integration with repository changelog structure
+
+### Technical Details
+
+- Node.js version management now future-proof with semantic tags
+- Release workflow only triggers on tag pushes (v*.*.*) for precise control
+- Custom changelog parsing for meaningful release notes
+- Maintained compatibility across all supported platforms (macOS, Ubuntu, Windows)
+
 ## [0.4.1] - 2025-10-01
 
 ### Added

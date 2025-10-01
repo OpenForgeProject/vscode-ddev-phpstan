@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v5
       with:
-        node-version: '20.x'
+        node-version: 'lts/*'
         cache: 'npm'
 
     - name: Install dependencies
@@ -33,22 +33,38 @@ jobs:
 
     - name: Get version from tag
       id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Extract changelog for version
+      id: changelog
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        # Extract changelog section for this version
+        sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' > release_notes.md
+        if [ ! -s release_notes.md ]; then
+          echo "No changelog found for version $VERSION"
+          echo "# Release $VERSION" > release_notes.md
+          echo "See CHANGELOG.md for details." >> release_notes.md
+        fi
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
+      uses: ncipollo/release-action@v1
       with:
-        files: '*.vsix'
-        generate_release_notes: true
+        artifacts: '*.vsix'
+        bodyFile: 'release_notes.md'
         draft: false
         prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: 'Release ${{ steps.get_version.outputs.TAG }}'
+        tag: ${{ steps.get_version.outputs.TAG }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # Publishing to marketplaces requires secrets to be configured
     # VSCE_PAT and OVSX_PAT need to be added as repository secrets
     # Uncomment and configure these steps when ready to publish
-    
+
     # - name: Publish to VS Code Marketplace
     #   run: npx @vscode/vsce publish --pat ${{ secrets.VSCE_PAT }}
     #   if: secrets.VSCE_PAT != null
