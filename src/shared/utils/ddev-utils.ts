@@ -64,7 +64,7 @@ export class DdevUtils {
      */
     public static isDdevRunning(workspacePath: string): boolean {
         try {
-            execSync('ddev exec echo "test"', {
+            execSync('XDEBUG_MODE=off ddev exec echo "test"', {
                 cwd: workspacePath,
                 stdio: 'ignore'
             });
@@ -83,7 +83,7 @@ export class DdevUtils {
      */
     public static isToolInstalled(toolName: string, workspacePath: string): boolean {
         try {
-            execSync(`ddev exec ${toolName} --version`, {
+            execSync(`XDEBUG_MODE=off ddev exec ${toolName} --version`, {
                 cwd: workspacePath,
                 stdio: 'ignore'
             });
@@ -112,7 +112,7 @@ export class DdevUtils {
 
         // Try to run the tool
         try {
-            execSync(`ddev exec ${toolName} --version`, {
+            execSync(`XDEBUG_MODE=off ddev exec ${toolName} --version`, {
                 cwd: workspacePath,
                 stdio: 'ignore'
             });
@@ -188,7 +188,9 @@ export class DdevUtils {
      */
     public static execDdev(command: string, workspacePath: string, allowedExitCodes: number[] = [0]): string {
         try {
-            return execSync(`ddev exec ${command}`, {
+            // Disable Xdebug for CLI commands to prevent hangs and performance issues
+            // when Xdebug is enabled in the DDEV container
+            return execSync(`XDEBUG_MODE=off ddev exec ${command}`, {
                 cwd: workspacePath,
                 encoding: 'utf-8'
             });
@@ -206,7 +208,7 @@ export class DdevUtils {
             (enhancedError as any).status = error.status;
             (enhancedError as any).stderr = error.stderr;
             (enhancedError as any).stdout = error.stdout;
-            (enhancedError as any).command = `ddev exec ${command}`;
+            (enhancedError as any).command = `XDEBUG_MODE=off ddev exec ${command}`;
             (enhancedError as any).workspacePath = workspacePath;
 
             throw enhancedError;

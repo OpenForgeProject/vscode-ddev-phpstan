@@ -197,7 +197,7 @@ function debugAnalyzeCurrentFile() {
         // Show output in a new document
         vscode.workspace.openTextDocument({
             content: `PHPStan Debug Output for: ${relativePath}\n` +
-                    `Command: ddev exec ${command}\n` +
+                    `Command: XDEBUG_MODE=off ddev exec ${command}\n` +
                     `Output length: ${output.length} characters\n` +
                     `${'='.repeat(80)}\n\n` +
                     output,

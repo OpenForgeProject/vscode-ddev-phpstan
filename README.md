@@ -138,6 +138,18 @@ PHPStan uses different exit codes to indicate different states:
 
 The extension handles exit codes 0 and 1 as successful execution, only treating exit code 2 and higher as actual failures.
 
+### Xdebug compatibility
+
+The extension automatically disables Xdebug for PHPStan analysis commands to prevent performance issues and hangs. When Xdebug is enabled in your DDEV container for debugging web requests, it can significantly slow down or cause CLI commands like PHPStan to hang.
+
+The extension uses `XDEBUG_MODE=off` when executing PHPStan commands, which:
+- Prevents Xdebug from interfering with PHPStan analysis
+- Improves analysis performance
+- Avoids timeout issues when Xdebug is waiting for a debugger connection
+- Does not affect your web debugging configuration
+
+This is handled automatically and requires no configuration on your part.
+
 ### No issues detected
 
 PHPStan might not find issues if:
