@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Xdebug Compatibility**: Resolved hang/timeout issues when Xdebug is enabled in DDEV container
+  - All DDEV exec commands now automatically use `XDEBUG_MODE=off` to disable Xdebug for CLI operations
+  - Prevents Xdebug from interfering with PHPStan analysis commands
+  - Significantly improves performance when Xdebug is enabled for web debugging
+  - No configuration required - handled automatically by the extension
+  - Does not affect Xdebug functionality for web request debugging
+
+### Improved
+
+- **Performance**: PHPStan analysis now runs faster when Xdebug is enabled
+- **Reliability**: Eliminated timeout issues caused by Xdebug waiting for debugger connections
+- **Documentation**: Added troubleshooting section for Xdebug compatibility
+
 ## [0.4.2] - 2025-10-01
 
 ### Changed
