@@ -83,10 +83,7 @@ export class DdevUtils {
      */
     public static isToolInstalled(toolName: string, workspacePath: string): boolean {
         try {
-            execSync(`ddev exec ${toolName} --version`, {
-                cwd: workspacePath,
-                stdio: 'ignore'
-            });
+            this.execDdev(`${toolName} --version`, workspacePath);
             return true;
         } catch (error) {
             return false;
@@ -112,10 +109,7 @@ export class DdevUtils {
 
         // Try to run the tool
         try {
-            execSync(`ddev exec ${toolName} --version`, {
-                cwd: workspacePath,
-                stdio: 'ignore'
-            });
+            this.execDdev(`${toolName} --version`, workspacePath);
 
             return {
                 isValid: true
@@ -188,7 +182,11 @@ export class DdevUtils {
      */
     public static execDdev(command: string, workspacePath: string, allowedExitCodes: number[] = [0]): string {
         try {
-            return execSync(`ddev exec ${command}`, {
+            // Wrap command in bash -c to allow setting environment variables (specifically disabling Xdebug)
+            // This fixes issues where Xdebug causes the command to hang or run slowly
+            // We use single quotes for the bash command and escape any single quotes in the original command
+            const escapedCommand = command.replace(/'/g, "'\\''");
+            return execSync(`ddev exec bash -c 'XDEBUG_MODE=off ${escapedCommand}'`, {
                 cwd: workspacePath,
                 encoding: 'utf-8'
             });

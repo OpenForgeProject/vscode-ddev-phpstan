@@ -138,4 +138,28 @@ suite('DdevUtils Test Suite', () => {
         assert.ok(result.userMessage?.includes('phpstan is not installed'));
         assert.ok(result.userMessage?.includes('phpstan/phpstan'));
     });
+
+    test('execDdev wraps command with XDEBUG_MODE=off', () => {
+        execSyncStub.returns('output');
+
+        const result = DdevUtils.execDdev('phpstan analyze', '/test/workspace');
+
+        assert.strictEqual(result, 'output');
+        assert.strictEqual(execSyncStub.calledOnce, true);
+        const callArgs = execSyncStub.firstCall.args;
+        assert.ok(callArgs[0].includes("XDEBUG_MODE=off"));
+        assert.ok(callArgs[0].includes("bash -c"));
+        assert.ok(callArgs[0].includes("'XDEBUG_MODE=off phpstan analyze'"));
+    });
+
+    test('execDdev escapes single quotes in command', () => {
+        execSyncStub.returns('output');
+
+        const result = DdevUtils.execDdev("echo 'hello'", '/test/workspace');
+
+        assert.strictEqual(result, 'output');
+        const callArgs = execSyncStub.firstCall.args;
+        // Should be: ddev exec bash -c 'XDEBUG_MODE=off echo '\''hello'\'''
+        assert.ok(callArgs[0].includes("'XDEBUG_MODE=off echo '\\''hello'\\'''"));
+    });
 });
