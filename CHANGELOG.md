@@ -2,30 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [0.0.1](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.5.0...v0.0.1) (2026-01-12)
-
-## [0.5.0] - 2026-01-12
-
-### Changed
-
-- **Code Security**: Enhanced command execution security
-  - Refactored command building to use array-based arguments to prevent command injection
-  - Replaced direct filesystem calls with system wrappers for improved security and testability
-- **Release Workflow**: Major optimizations to the release process
-  - Automated `package.json` version bumping from Git tags (no manual updates needed)
-  - Added artifact upload for `.vsix` packages in GitHub Actions
-  - Integrated linting steps to facilitate higher code quality checks before release
-  - Updated GitHub Actions (`checkout`, `setup-node`) to `v6`
-- **Dependencies**: Updated core dependencies
-  - Bumped VS Code engine requirement to `^1.108.0`
-  - Updated `@types/vscode`, `@types/node`, and `ovsx`
-
-### Fixed
-
-- **Code Quality**: Resolved various code scanning alerts and static analysis findings
-  - Cleaned up unused variables, imports, and unreachable code
-  - Improved command argument handling for stability
-
 ## [0.4.2] - 2025-10-01
 
 ### Changed
