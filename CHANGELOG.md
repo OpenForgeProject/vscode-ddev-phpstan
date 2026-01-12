@@ -4,12 +4,11 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [0.5.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.2...v0.5.0) (2026-01-12)
 
-
 ### Features
 
-* update release management ([6c5c5ac](https://github.com/OpenForgeProject/vscode-ddev-phpstan/commit/6c5c5acc4a8609bb6dd3262c21a771abef182f93))
+* **Release Management**: Refined release workflow with conditional execution and updated token configuration ([6c5c5ac](https://github.com/OpenForgeProject/vscode-ddev-phpstan/commit/6c5c5acc4a8609bb6dd3262c21a771abef182f93))
 
-## [0.4.2] - 2025-10-01
+## [0.4.2](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.1...v0.4.2) (2025-10-01)
 
 ### Changed
 
@@ -32,7 +31,7 @@ All notable changes to this project will be documented in this file. This projec
 - Custom changelog parsing for meaningful release notes
 - Maintained compatibility across all supported platforms (macOS, Ubuntu, Windows)
 
-## [0.4.1] - 2025-10-01
+## [0.4.1](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.0...v0.4.1) (2025-10-01)
 
 ### Added
 
@@ -56,7 +55,7 @@ All notable changes to this project will be documented in this file. This projec
 - Maintained full functionality while reducing package size
 - GitHub Actions ready for automated marketplace publishing
 
-## [0.4.0] - 2025-09-30
+## [0.4.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.3.0...v0.4.0) (2025-09-30)
 
 ### Changed
 
@@ -81,7 +80,7 @@ All notable changes to this project will be documented in this file. This projec
 - Enhanced type annotations for esbuild plugins and configuration objects
 - Maintained full backward compatibility with existing functionality
 
-## [0.3.0] - 2025-09-30
+## [0.3.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.2.0...v0.3.0) (2025-09-30)
 
 ### Updated
 
@@ -110,7 +109,7 @@ All notable changes to this project will be documented in this file. This projec
 - Enhanced build performance with latest esbuild version
 - Modernized GitHub Actions for better CI/CD reliability
 
-## [0.2.0] - 2025-09-30
+## [0.2.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.1.0...v0.2.0) (2025-09-30)
 
 ### Added
 
@@ -143,7 +142,7 @@ All notable changes to this project will be documented in this file. This projec
 - Multi-platform compatibility testing
 - Security vulnerability scanning
 
-## [0.1.0] - 2025-09-30
+## [0.1.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/releases/tag/v0.1.0) (2025-09-30)
 
 ### Added
 
