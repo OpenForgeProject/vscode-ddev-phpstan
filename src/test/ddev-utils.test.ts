@@ -19,8 +19,16 @@
 
 import * as assert from 'assert';
 import * as sinon from 'sinon';
-import { afterEach, beforeEach } from 'mocha';
+import { afterEach, beforeEach, test } from 'mocha';
 import { DdevUtils, sys } from '../shared/utils/ddev-utils';
+
+interface ExecDdevError extends Error {
+    status: number;
+    stderr: string;
+    stdout?: string;
+    command?: string;
+    workspacePath?: string;
+}
 
 suite('DdevUtils Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
@@ -106,7 +114,7 @@ suite('DdevUtils Test Suite', () => {
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
 
         assert.strictEqual(result.isValid, true);
-        assert.ok(result.errorType === undefined);
+        assert.strictEqual(result.errorType, undefined);
     });
 
     test('validateDdevTool returns error message for DDEV issues', () => {
@@ -159,7 +167,7 @@ suite('DdevUtils Test Suite', () => {
 
         assert.throws(() => {
             DdevUtils.execDdev(['ls'], '/test/workspace');
-        }, (err: { status: number; stderr: string; stdout?: string; command?: string; workspacePath?: string; name?: string }) => {
+        }, (err: ExecDdevError) => {
             return err.status === 1 && err.stderr === 'error';
         });
     });

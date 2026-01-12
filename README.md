@@ -14,7 +14,7 @@ This extension integrates [PHPStan](https://phpstan.org/) with Visual Studio Cod
 
 ## Requirements
 
-- [VS Code](https://code.visualstudio.com/) 1.100.0 or higher
+- [VS Code](https://code.visualstudio.com/) 1.108.0 or higher
 - [DDEV](https://github.com/ddev/ddev) project with running container
 - PHPStan installed in your DDEV container
 
@@ -51,10 +51,10 @@ Key settings in VS Code preferences:
 - `ddev-phpstan.validateOn`: When to validate (`"save"` or `"type"`)
 - `ddev-phpstan.level`: PHPStan analysis level 0-9 (default: `6` - recommended for most projects)
 - `ddev-phpstan.minSeverity`: Minimum severity level (`"error"`, `"warning"`, `"info"`)
-- `ddev-phpstan.configPath`: Path to custom PHPStan configuration file
+- `ddev-phpstan.configPath`: Path to custom PHPStan configuration file. If left empty, the extension automatically looks for common configuration files like `phpstan.neon`, `phpstan.neon.dist`, `phpstan.dist.neon` in the workspace root.
 - `ddev-phpstan.excludePaths`: Array of paths to exclude from analysis (includes common exclusions by default)
 
-**Important:** When `configPath` is specified, the extension will only use the configuration file and ignore the `level` and `excludePaths` settings, as these should be defined in the PHPStan configuration file itself.
+**Important:** When `configPath` is specified or an auto-detected configuration file is found, the extension will use that configuration file. In this case, the `level` and `excludePaths` settings from VS Code are ignored, as these should be defined in the PHPStan configuration file itself.
 
 ### Example Configuration
 
@@ -82,7 +82,7 @@ Key settings in VS Code preferences:
 - **Common Exclusions**: Automatically excludes vendor code, cache directories, and other common paths that shouldn't be analyzed
 - **Save-based Validation**: Runs analysis when files are saved for optimal performance
 
-**Note:** When `configPath` is set to a specific PHPStan configuration file, the `level` and `excludePaths` settings will be ignored, and these values should instead be configured in your PHPStan configuration file.
+**Note:** When `configPath` is set to a specific PHPStan configuration file (or one is auto-detected), the `level` and `excludePaths` settings will be ignored, and these values should instead be configured in your PHPStan configuration file.
 
 ## Status Bar
 
