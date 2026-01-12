@@ -159,7 +159,7 @@ suite('DdevUtils Test Suite', () => {
 
         assert.throws(() => {
             DdevUtils.execDdev(['ls'], '/test/workspace');
-        }, (err: { status: number; stderr: string }) => {
+        }, (err: { status: number; stderr: string; stdout?: string; command?: string; workspacePath?: string; name?: string }) => {
             return err.status === 1 && err.stderr === 'error';
         });
     });
