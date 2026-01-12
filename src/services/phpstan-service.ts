@@ -55,31 +55,34 @@ export class PhpstanService extends BasePhpToolService {
     /**
      * Build PHPStan command with configuration
      */
-    protected buildToolCommand(filePath: string): string {
-        let command = 'phpstan analyze --error-format=json --no-progress';
+    protected buildToolCommand(filePath: string): string[] {
+        const command = ['phpstan', 'analyze', '--error-format=json', '--no-progress'];
 
         // Use config file if specified, otherwise use individual settings
         if (this.config.configPath) {
             // Use specified config file
-            command += ` -c "${this.config.configPath}"`;
+            command.push('-c', this.config.configPath);
         } else {
             // Try to auto-detect common PHPStan config files
             const autoConfigPath = this.detectPhpstanConfig();
             if (autoConfigPath) {
                 console.log(`PHPStan: Auto-detected config file: ${autoConfigPath}`);
-                command += ` -c "${autoConfigPath}"`;
+                command.push('-c', autoConfigPath);
             } else {
                 // Use individual settings when no config file is found
-                command += ` --level=${this.config.level}`;
+                command.push('--level', String(this.config.level));
 
                 // Add exclude paths
                 if (this.config.excludePaths && this.config.excludePaths.length > 0) {
                     for (const excludePath of this.config.excludePaths) {
-                        command += ` --exclude="${excludePath}"`;
+                        command.push('--exclude', excludePath);
                     }
                 }
             }
         }
+
+        // Add the file to analyze
+        command.push(filePath);
 
         return command;
     }

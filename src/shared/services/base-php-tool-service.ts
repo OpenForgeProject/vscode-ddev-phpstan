@@ -65,7 +65,7 @@ export abstract class BasePhpToolService {
     /**
      * Build the command to execute the tool
      */
-    protected abstract buildToolCommand(relativePath: string): string;
+    protected abstract buildToolCommand(relativePath: string): string[];
 
     /**
      * Process the tool output and convert to diagnostics
@@ -193,7 +193,7 @@ export abstract class BasePhpToolService {
         try {
             // PHPStan returns exit code 1 when errors are found, which is normal
             const allowedExitCodes = this.toolName === 'phpstan' ? [0, 1] : [0];
-            console.log(`Executing ${this.displayName} command: ${toolCommand}`);
+            console.log(`Executing ${this.displayName} command: ${toolCommand.join(' ')}`);
 
             const output = DdevUtils.execDdev(toolCommand, workspaceFolder.uri.fsPath, allowedExitCodes);
             console.log(`${this.displayName} output length: ${output.length} characters`);
