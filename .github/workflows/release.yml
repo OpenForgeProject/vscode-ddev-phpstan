@@ -1,16 +1,15 @@
-name: Release
+name: Publish
 
 on:
-  push:
-    tags:
-      - v*.*.*
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +19,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
-          cache: npm
+          node-version: 'lts/*'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -44,39 +43,16 @@ jobs:
           name: vsix-package
           path: '*.vsix'
 
-      - name: Get version from tag
-        id: get_version
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
-      - name: Extract changelog for version
-        id: changelog
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          # Extract changelog section for this version
-          sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' > release_notes.md
-          if [ ! -s release_notes.md ]; then
-            echo "No changelog found for version $VERSION"
-            echo "# Release $VERSION" > release_notes.md
-            echo "See CHANGELOG.md for details." >> release_notes.md
-          fi
-
-      - name: Create GitHub Release
+      - name: Upload vsix to Release
         uses: ncipollo/release-action@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.event_name == 'release'
         with:
+          allowUpdates: true
+          omitBody: true
+          omitName: true
           artifacts: '*.vsix'
-          bodyFile: release_notes.md
-          draft: false
-          prerelease: false
-          name: 'Release ${{ steps.get_version.outputs.TAG }}'
-          tag: ${{ steps.get_version.outputs.TAG }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to VS Code Marketplace
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.event_name == 'release'
         run: npx @vscode/vsce publish --packagePath *.vsix -p ${{ secrets.VSCE_PAT }}
