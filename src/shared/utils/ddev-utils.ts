@@ -19,9 +19,17 @@
  */
 
 import * as vscode from 'vscode';
-import { spawnSync } from 'child_process';
+import * as cp from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
+
+/**
+ * System calls wrapper for testability
+ */
+export const sys = {
+    spawnSync: cp.spawnSync,
+    existsSync: fs.existsSync
+};
 
 /**
  * DDEV project validation result
@@ -49,7 +57,7 @@ export class DdevUtils {
     public static hasDdevProject(workspacePath: string): boolean {
         try {
             const configPath = path.join(workspacePath, '.ddev', 'config.yaml');
-            return fs.existsSync(configPath);
+            return sys.existsSync(configPath);
         } catch (error) {
             return false;
         }
@@ -63,7 +71,7 @@ export class DdevUtils {
      */
     public static isDdevRunning(workspacePath: string): boolean {
         try {
-            const result = spawnSync('ddev', ['exec', 'echo', 'test'], {
+            const result = sys.spawnSync('ddev', ['exec', 'echo', 'test'], {
                 cwd: workspacePath,
                 encoding: 'utf-8'
             });
@@ -197,7 +205,7 @@ export class DdevUtils {
             // We use 'env' to set environment variables inside the container
             const args = ['exec', 'env', 'XDEBUG_MODE=off', ...command];
 
-            const result = spawnSync('ddev', args, {
+            const result = sys.spawnSync('ddev', args, {
                 cwd: workspacePath,
                 encoding: 'utf-8'
             });

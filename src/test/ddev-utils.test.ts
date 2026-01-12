@@ -20,9 +20,7 @@
 import * as assert from 'assert';
 import * as sinon from 'sinon';
 import { afterEach, beforeEach } from 'mocha';
-import * as cp from 'child_process';
-import * as fs from 'fs';
-import { DdevUtils } from '../shared/utils/ddev-utils';
+import { DdevUtils, sys } from '../shared/utils/ddev-utils';
 
 suite('DdevUtils Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
@@ -31,15 +29,8 @@ suite('DdevUtils Test Suite', () => {
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-
-        // Try to stub, but handle if it fails (basic check)
-        try {
-            spawnSyncStub = sandbox.stub(cp, 'spawnSync');
-            existsSyncStub = sandbox.stub(fs, 'existsSync');
-        } catch (e) {
-            console.error('Failed to stub modules:', e);
-            throw e;
-        }
+        spawnSyncStub = sandbox.stub(sys, 'spawnSync');
+        existsSyncStub = sandbox.stub(sys, 'existsSync');
     });
 
     afterEach(() => {
