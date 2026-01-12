@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Setup Node.js
-      uses: actions/setup-node@v5
+      uses: actions/setup-node@v6
       with:
         node-version: 'lts/*'
         cache: 'npm'
@@ -64,14 +64,6 @@ jobs:
         tag: ${{ steps.get_version.outputs.TAG }}
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    # Publishing to marketplaces requires secrets to be configured
-    # VSCE_PAT and OVSX_PAT need to be added as repository secrets
-    # Uncomment and configure these steps when ready to publish
+    - name: Publish to VS Code Marketplace
+      run: npx @vscode/vsce publish --packagePath *.vsix -p ${{ secrets.VSCE_PAT }}
 
-    # - name: Publish to VS Code Marketplace
-    #   run: npx @vscode/vsce publish --pat ${{ secrets.VSCE_PAT }}
-    #   if: secrets.VSCE_PAT != null
-
-    # - name: Publish to Open VSX Registry
-    #   run: npx ovsx publish *.vsix --pat ${{ secrets.OVSX_PAT }}
-    #   if: secrets.OVSX_PAT != null
