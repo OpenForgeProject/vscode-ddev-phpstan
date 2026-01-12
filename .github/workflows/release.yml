@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - v*.*.*
 
 permissions:
   contents: write
@@ -13,57 +13,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v6
-      with:
-        node-version: 'lts/*'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: npm
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run tests
-      uses: coactions/setup-xvfb@v1
-      with:
-        run: npm test
+      - name: Run tests
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm test
 
-    - name: Package extension
-      run: |
-        npx @vscode/vsce package
+      - name: Package extension
+        run: |
+          npx @vscode/vsce package
 
-    - name: Get version from tag
-      id: get_version
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/v}
-        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-        echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      - name: Get version from tag
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-    - name: Extract changelog for version
-      id: changelog
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/v}
-        # Extract changelog section for this version
-        sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' > release_notes.md
-        if [ ! -s release_notes.md ]; then
-          echo "No changelog found for version $VERSION"
-          echo "# Release $VERSION" > release_notes.md
-          echo "See CHANGELOG.md for details." >> release_notes.md
-        fi
+      - name: Extract changelog for version
+        id: changelog
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          # Extract changelog section for this version
+          sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "No changelog found for version $VERSION"
+            echo "# Release $VERSION" > release_notes.md
+            echo "See CHANGELOG.md for details." >> release_notes.md
+          fi
 
-    - name: Create GitHub Release
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: '*.vsix'
-        bodyFile: 'release_notes.md'
-        draft: false
-        prerelease: false
-        name: 'Release ${{ steps.get_version.outputs.TAG }}'
-        tag: ${{ steps.get_version.outputs.TAG }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "*.vsix"
+          bodyFile: release_notes.md
+          draft: false
+          prerelease: false
+          name: "Release ${{ steps.get_version.outputs.TAG }}"
+          tag: ${{ steps.get_version.outputs.TAG }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish to VS Code Marketplace
-      run: npx @vscode/vsce publish --packagePath *.vsix -p ${{ secrets.VSCE_PAT }}
-
+      - name: Publish to VS Code Marketplace
+        run: npx @vscode/vsce publish --packagePath *.vsix -p ${{ secrets.VSCE_PAT }}
