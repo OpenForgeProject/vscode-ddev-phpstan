@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file. This project uses [Release Please](https://github.com/googleapis/release-please) to automate releases and changelog management.
 
-## [0.5.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.2...v0.5.0) (2026-01-12)
+## [0.5.1](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.2...v0.5.1) (2026-01-12)
 
 ### Features
 
-* **Release Management**: Refined release workflow with conditional execution and updated token configuration ([6c5c5ac](https://github.com/OpenForgeProject/vscode-ddev-phpstan/commit/6c5c5acc4a8609bb6dd3262c21a771abef182f93))
+- **DDEV Execution**: Wrapped execDdev command with XDEBUG_MODE=off for better performance ([#44](https://github.com/OpenForgeProject/vscode-ddev-phpstan/pull/44))
+- **Release Management**: Updated release workflow and token configuration ([#60](https://github.com/OpenForgeProject/vscode-ddev-phpstan/pull/60), [#62](https://github.com/OpenForgeProject/vscode-ddev-phpstan/pull/62))
+
+### Fixed
+
+- **Error Handling**: Improved null status handling in DDEV checks and argument processing ([#58](https://github.com/OpenForgeProject/vscode-ddev-phpstan/pull/58))
+- **Code Quality**: Addressed code scanning alerts and review findings ([#56](https://github.com/OpenForgeProject/vscode-ddev-phpstan/pull/56), [#57](https://github.com/OpenForgeProject/vscode-ddev-phpstan/pull/57))
+- **Dependencies**: Updated minor dependencies and security patches
 
 ## [0.4.2](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.1...v0.4.2) (2025-10-01)
 
