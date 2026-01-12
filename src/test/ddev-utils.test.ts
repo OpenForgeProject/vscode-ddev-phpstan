@@ -118,10 +118,11 @@ suite('DdevUtils Test Suite', () => {
         spawnSyncStub.onSecondCall().returns({ status: 1, stderr: 'DDEV not running' });
 
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
+        const expectedMessage = "DDEV project appears to be stopped. Please start DDEV with 'ddev start' to use phpstan.";
 
         assert.strictEqual(result.isValid, false);
         assert.strictEqual(result.errorType, 'ddev-not-running');
-        assert.ok(result.userMessage && result.userMessage.includes('appears to be stopped'));
+        assert.strictEqual(result.userMessage, expectedMessage);
     });
 
     test('validateDdevTool returns tool not found message when tool is missing', () => {
@@ -133,11 +134,11 @@ suite('DdevUtils Test Suite', () => {
         spawnSyncStub.onSecondCall().returns({ status: 0, stdout: 'test\n' });
 
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
+        const expectedMessage = 'phpstan is not installed in the DDEV container. Install it with: ddev composer require --dev phpstan/phpstan';
 
         assert.strictEqual(result.isValid, false);
         assert.strictEqual(result.errorType, 'tool-not-found');
-        assert.ok(result.userMessage?.includes('phpstan is not installed'));
-        assert.ok(result.userMessage?.includes('phpstan/phpstan'));
+        assert.strictEqual(result.userMessage, expectedMessage);
     });
 
     test('execDdev passes args array correctly', () => {
@@ -158,7 +159,7 @@ suite('DdevUtils Test Suite', () => {
 
         assert.throws(() => {
             DdevUtils.execDdev(['ls'], '/test/workspace');
-        }, (err: any) => {
+        }, (err: { status: number; stderr: string; stdout?: string; command?: string; workspacePath?: string; name?: string }) => {
             return err.status === 1 && err.stderr === 'error';
         });
     });
