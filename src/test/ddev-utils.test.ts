@@ -20,8 +20,9 @@
 import * as assert from 'assert';
 import * as sinon from 'sinon';
 import { afterEach, beforeEach } from 'mocha';
+import * as cp from 'child_process';
+import * as fs from 'fs';
 import { DdevUtils } from '../shared/utils/ddev-utils';
-
 
 suite('DdevUtils Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
@@ -30,9 +31,6 @@ suite('DdevUtils Test Suite', () => {
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-        // Use require to get the module to ensure we can stub it
-        const cp = require('child_process');
-        const fs = require('fs');
 
         // Try to stub, but handle if it fails (basic check)
         try {

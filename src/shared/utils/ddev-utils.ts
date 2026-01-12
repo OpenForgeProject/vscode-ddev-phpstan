@@ -204,7 +204,7 @@ export class DdevUtils {
             }
 
             if (result.status !== 0) {
-                 // Enhance error message with more details
+                // Enhance error message with more details
                 const enhancedError = new Error(result.stderr || 'Command execution failed');
                 enhancedError.name = 'CommandError';
                 (enhancedError as any).status = result.status;
@@ -214,10 +214,8 @@ export class DdevUtils {
                 (enhancedError as any).workspacePath = workspacePath;
                 throw enhancedError;
             }
-
-            return result.stdout;
         } catch (error: any) {
-             // If error was already thrown above, rethrow it
+            // If error was already thrown above, rethrow it
             if (error.name === 'CommandError') {
                 throw error;
             }
