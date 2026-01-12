@@ -21,16 +21,28 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import { afterEach, beforeEach } from 'mocha';
 import { DdevUtils } from '../shared/utils/ddev-utils';
+import * as cp from 'child_process';
+import * as fs from 'fs';
 
 suite('DdevUtils Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
-    let execSyncStub: sinon.SinonStub;
+    let spawnSyncStub: sinon.SinonStub;
+    let existsSyncStub: sinon.SinonStub;
 
     beforeEach(() => {
         sandbox = sinon.createSandbox();
-        // Mock the entire child_process module
-        const childProcess = require('child_process');
-        execSyncStub = sandbox.stub(childProcess, 'execSync');
+        // Use require to get the module to ensure we can stub it
+        const cp = require('child_process');
+        const fs = require('fs');
+
+        // Try to stub, but handle if it fails (basic check)
+        try {
+            spawnSyncStub = sandbox.stub(cp, 'spawnSync');
+            existsSyncStub = sandbox.stub(fs, 'existsSync');
+        } catch (e) {
+            console.error('Failed to stub modules:', e);
+            throw e;
+        }
     });
 
     afterEach(() => {
@@ -38,16 +50,16 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('hasDdevProject returns true when .ddev/config.yaml exists', () => {
-        execSyncStub.returns('exists\n');
+        existsSyncStub.returns(true);
 
         const result = DdevUtils.hasDdevProject('/test/workspace');
 
         assert.strictEqual(result, true);
-        assert.strictEqual(execSyncStub.calledOnce, true);
+        assert.strictEqual(existsSyncStub.calledOnce, true);
     });
 
     test('hasDdevProject returns false when .ddev/config.yaml does not exist', () => {
-        execSyncStub.throws(new Error('File not found'));
+        existsSyncStub.returns(false);
 
         const result = DdevUtils.hasDdevProject('/test/workspace');
 
@@ -55,7 +67,7 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('isDdevRunning returns true when DDEV container is running', () => {
-        execSyncStub.returns('');
+        spawnSyncStub.returns({ status: 0, stdout: 'test\n' });
 
         const result = DdevUtils.isDdevRunning('/test/workspace');
 
@@ -63,7 +75,7 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('isDdevRunning returns false when DDEV container is not running', () => {
-        execSyncStub.throws(new Error('Container not running'));
+        spawnSyncStub.returns({ status: 1, stderr: 'Container not running' });
 
         const result = DdevUtils.isDdevRunning('/test/workspace');
 
@@ -71,7 +83,7 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('isToolInstalled returns true when tool is available', () => {
-        execSyncStub.returns('PHPStan 1.10.0\n');
+        spawnSyncStub.returns({ status: 0, stdout: 'PHPStan 1.10.0\n' });
 
         const result = DdevUtils.isToolInstalled('phpstan', '/test/workspace');
 
@@ -79,7 +91,7 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('isToolInstalled returns false when tool is not available', () => {
-        execSyncStub.throws(new Error('Command not found'));
+        spawnSyncStub.returns({ status: 1, stderr: 'Command not found' });
 
         const result = DdevUtils.isToolInstalled('phpstan', '/test/workspace');
 
@@ -87,7 +99,7 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('validateDdevTool returns invalid result when no DDEV project found', () => {
-        execSyncStub.throws(new Error('File not found'));
+        existsSyncStub.returns(false);
 
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
 
@@ -97,10 +109,10 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('validateDdevTool returns valid result when tool is available', () => {
-        // First call (hasDdevProject) succeeds
-        execSyncStub.onFirstCall().returns('exists\n');
-        // Second call (tool version check) succeeds
-        execSyncStub.onSecondCall().returns('PHPStan 1.10.0\n');
+        // hasDdevProject
+        existsSyncStub.returns(true);
+        // execDdev (tool check)
+        spawnSyncStub.returns({ status: 0, stdout: 'PHPStan 1.10.0\n' });
 
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
 
@@ -109,12 +121,12 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('validateDdevTool returns error message for DDEV issues', () => {
-        // First call (hasDdevProject) succeeds
-        execSyncStub.onFirstCall().returns('exists\n');
-        // Second call (tool version check) fails
-        execSyncStub.onSecondCall().throws(new Error('Container not running'));
-        // Third call (isDdevRunning) fails
-        execSyncStub.onThirdCall().throws(new Error('DDEV not running'));
+        // hasDdevProject
+        existsSyncStub.returns(true);
+        // execDdev (tool check) fails
+        spawnSyncStub.onFirstCall().returns({ status: 1, stderr: 'Container not running' });
+        // isDdevRunning fails
+        spawnSyncStub.onSecondCall().returns({ status: 1, stderr: 'DDEV not running' });
 
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
 
@@ -124,12 +136,12 @@ suite('DdevUtils Test Suite', () => {
     });
 
     test('validateDdevTool returns tool not found message when tool is missing', () => {
-        // First call (hasDdevProject) succeeds
-        execSyncStub.onFirstCall().returns('exists\n');
-        // Second call (tool version check) fails
-        execSyncStub.onSecondCall().throws(new Error('Command not found'));
-        // Third call (isDdevRunning) succeeds
-        execSyncStub.onThirdCall().returns('');
+        // hasDdevProject
+        existsSyncStub.returns(true);
+        // execDdev (tool check) fails
+        spawnSyncStub.onFirstCall().returns({ status: 127, stderr: 'Command not found' });
+        // isDdevRunning succeeds
+        spawnSyncStub.onSecondCall().returns({ status: 0, stdout: 'test\n' });
 
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
 
@@ -139,27 +151,35 @@ suite('DdevUtils Test Suite', () => {
         assert.ok(result.userMessage?.includes('phpstan/phpstan'));
     });
 
-    test('execDdev wraps command with XDEBUG_MODE=off', () => {
-        execSyncStub.returns('output');
+    test('execDdev passes args array correctly', () => {
+        spawnSyncStub.returns({ status: 0, stdout: 'output' });
 
-        const result = DdevUtils.execDdev('phpstan analyze', '/test/workspace');
+        const result = DdevUtils.execDdev(['phpstan', 'analyze'], '/test/workspace');
 
         assert.strictEqual(result, 'output');
-        assert.strictEqual(execSyncStub.calledOnce, true);
-        const callArgs = execSyncStub.firstCall.args;
-        assert.ok(callArgs[0].includes("XDEBUG_MODE=off"));
-        assert.ok(callArgs[0].includes("bash -c"));
-        assert.ok(callArgs[0].includes("'XDEBUG_MODE=off phpstan analyze'"));
+        assert.strictEqual(spawnSyncStub.calledOnce, true);
+        const callArgs = spawnSyncStub.firstCall.args;
+        assert.strictEqual(callArgs[0], 'ddev');
+        assert.deepStrictEqual(callArgs[1], ['exec', 'env', 'XDEBUG_MODE=off', 'phpstan', 'analyze']);
+        assert.strictEqual(callArgs[2].cwd, '/test/workspace');
     });
 
-    test('execDdev escapes single quotes in command', () => {
-        execSyncStub.returns('output');
+    test('execDdev throws on non-zero exit code', () => {
+        spawnSyncStub.returns({ status: 1, stderr: 'error', stdout: '' });
 
-        const result = DdevUtils.execDdev("echo 'hello'", '/test/workspace');
+        assert.throws(() => {
+            DdevUtils.execDdev(['ls'], '/test/workspace');
+        }, (err: any) => {
+            return err.status === 1 && err.stderr === 'error';
+        });
+    });
 
-        assert.strictEqual(result, 'output');
-        const callArgs = execSyncStub.firstCall.args;
-        // Should be: ddev exec bash -c 'XDEBUG_MODE=off echo '\''hello'\'''
-        assert.ok(callArgs[0].includes("'XDEBUG_MODE=off echo '\\''hello'\\'''"));
+    test('execDdev returns stdout on allowed non-zero exit code', () => {
+        spawnSyncStub.returns({ status: 1, stdout: 'partial output' });
+
+        const result = DdevUtils.execDdev(['ls'], '/test/workspace', [0, 1]);
+
+        assert.strictEqual(result, 'partial output');
     });
 });
+

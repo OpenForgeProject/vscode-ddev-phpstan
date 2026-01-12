@@ -19,7 +19,9 @@
  */
 
 import * as vscode from 'vscode';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * DDEV project validation result
@@ -46,11 +48,8 @@ export class DdevUtils {
      */
     public static hasDdevProject(workspacePath: string): boolean {
         try {
-            const ddevConfig = execSync('test -f .ddev/config.yaml && echo "exists"', {
-                cwd: workspacePath,
-                encoding: 'utf-8'
-            });
-            return ddevConfig.includes('exists');
+            const configPath = path.join(workspacePath, '.ddev', 'config.yaml');
+            return fs.existsSync(configPath);
         } catch (error) {
             return false;
         }
@@ -64,11 +63,11 @@ export class DdevUtils {
      */
     public static isDdevRunning(workspacePath: string): boolean {
         try {
-            execSync('ddev exec echo "test"', {
+            const result = spawnSync('ddev', ['exec', 'echo', 'test'], {
                 cwd: workspacePath,
-                stdio: 'ignore'
+                encoding: 'utf-8'
             });
-            return true;
+            return result.status === 0;
         } catch (error) {
             return false;
         }
@@ -83,7 +82,7 @@ export class DdevUtils {
      */
     public static isToolInstalled(toolName: string, workspacePath: string): boolean {
         try {
-            this.execDdev(`${toolName} --version`, workspacePath);
+            this.execDdev([toolName, '--version'], workspacePath);
             return true;
         } catch (error) {
             return false;
@@ -109,7 +108,7 @@ export class DdevUtils {
 
         // Try to run the tool
         try {
-            this.execDdev(`${toolName} --version`, workspacePath);
+            this.execDdev([toolName, '--version'], workspacePath);
 
             return {
                 isValid: true
@@ -174,37 +173,62 @@ export class DdevUtils {
     /**
      * Execute a command in the DDEV container
      *
-     * @param command Command to execute
+     * @param command Command to execute (as array of strings)
      * @param workspacePath Path to the workspace
      * @param allowedExitCodes Array of exit codes that should not throw (default: [0])
      * @returns Output of the command
      * @throws Error if the command fails with disallowed exit code
      */
-    public static execDdev(command: string, workspacePath: string, allowedExitCodes: number[] = [0]): string {
+    public static execDdev(command: string[], workspacePath: string, allowedExitCodes: number[] = [0]): string {
         try {
-            // Wrap command in bash -c to allow setting environment variables (specifically disabling Xdebug)
-            // This fixes issues where Xdebug causes the command to hang or run slowly
-            // We use single quotes for the bash command and escape any single quotes in the original command
-            const escapedCommand = command.replace(/'/g, "'\\''");
-            return execSync(`ddev exec bash -c 'XDEBUG_MODE=off ${escapedCommand}'`, {
+            // Use spawnSync to avoid shell injection and safely pass arguments
+            // We use 'env' to set environment variables inside the container
+            const args = ['exec', 'env', 'XDEBUG_MODE=off', ...command];
+
+            const result = spawnSync('ddev', args, {
                 cwd: workspacePath,
                 encoding: 'utf-8'
             });
-        } catch (error: any) {
-            // Check if this is an acceptable exit code (e.g., PHPStan returns 1 when errors are found)
-            if (error.status && allowedExitCodes.includes(error.status)) {
-                // Return stdout even if exit code is non-zero but allowed
-                console.log(`Command exited with allowed code ${error.status}: ${command}`);
-                return error.stdout || '';
+
+            if (result.error) {
+                throw result.error;
             }
 
-            // Enhance error message with more details
+            // Check if this is an acceptable exit code
+            if (result.status !== null && allowedExitCodes.includes(result.status)) {
+                // Return stdout even if exit code is non-zero but allowed
+                if (result.status !== 0) {
+                    console.log(`Command exited with allowed code ${result.status}: ${command.join(' ')}`);
+                }
+                return result.stdout || '';
+            }
+
+            if (result.status !== 0) {
+                 // Enhance error message with more details
+                const enhancedError = new Error(result.stderr || 'Command execution failed');
+                enhancedError.name = 'CommandError';
+                (enhancedError as any).status = result.status;
+                (enhancedError as any).stderr = result.stderr;
+                (enhancedError as any).stdout = result.stdout;
+                (enhancedError as any).command = `ddev exec ${command.join(' ')}`;
+                (enhancedError as any).workspacePath = workspacePath;
+                throw enhancedError;
+            }
+
+            return result.stdout;
+        } catch (error: any) {
+             // If error was already thrown above, rethrow it
+            if (error.name === 'CommandError') {
+                throw error;
+            }
+
+            // Handle unexpected errors
             const enhancedError = new Error(error.message || 'Command execution failed');
             enhancedError.name = error.name || 'CommandError';
             (enhancedError as any).status = error.status;
             (enhancedError as any).stderr = error.stderr;
             (enhancedError as any).stdout = error.stdout;
-            (enhancedError as any).command = `ddev exec ${command}`;
+            (enhancedError as any).command = `ddev exec ${command.join(' ')}`;
             (enhancedError as any).workspacePath = workspacePath;
 
             throw enhancedError;
