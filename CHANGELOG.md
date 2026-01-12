@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+All notable changes to this project will be documented in this file. This project uses [Release Please](https://github.com/googleapis/release-please) to automate releases and changelog management.
 
 ## [0.4.2] - 2025-10-01
 
