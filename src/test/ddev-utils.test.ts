@@ -43,7 +43,7 @@ suite('DdevUtils Test Suite', () => {
         const result = DdevUtils.hasDdevProject('/test/workspace');
 
         assert.strictEqual(result, true);
-        assert.strictEqual(existsSyncStub.calledOnce, true);
+        sinon.assert.calledOnce(existsSyncStub);
     });
 
     test('hasDdevProject returns false when .ddev/config.yaml does not exist', () => {
@@ -52,6 +52,7 @@ suite('DdevUtils Test Suite', () => {
         const result = DdevUtils.hasDdevProject('/test/workspace');
 
         assert.strictEqual(result, false);
+        sinon.assert.calledOnce(existsSyncStub);
     });
 
     test('isDdevRunning returns true when DDEV container is running', () => {
@@ -105,7 +106,7 @@ suite('DdevUtils Test Suite', () => {
         const result = DdevUtils.validateDdevTool('phpstan', '/test/workspace');
 
         assert.strictEqual(result.isValid, true);
-        assert.strictEqual(result.errorType, undefined);
+        assert.ok(result.errorType === undefined);
     });
 
     test('validateDdevTool returns error message for DDEV issues', () => {
@@ -120,7 +121,7 @@ suite('DdevUtils Test Suite', () => {
 
         assert.strictEqual(result.isValid, false);
         assert.strictEqual(result.errorType, 'ddev-not-running');
-        assert.ok(result.userMessage?.includes('appears to be stopped'));
+        assert.ok(result.userMessage && result.userMessage.includes('appears to be stopped'));
     });
 
     test('validateDdevTool returns tool not found message when tool is missing', () => {
@@ -145,7 +146,7 @@ suite('DdevUtils Test Suite', () => {
         const result = DdevUtils.execDdev(['phpstan', 'analyze'], '/test/workspace');
 
         assert.strictEqual(result, 'output');
-        assert.strictEqual(spawnSyncStub.calledOnce, true);
+        sinon.assert.calledOnce(spawnSyncStub);
         const callArgs = spawnSyncStub.firstCall.args;
         assert.strictEqual(callArgs[0], 'ddev');
         assert.deepStrictEqual(callArgs[1], ['exec', 'env', 'XDEBUG_MODE=off', 'phpstan', 'analyze']);
