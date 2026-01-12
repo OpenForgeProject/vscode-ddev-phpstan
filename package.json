@@ -2,7 +2,7 @@
   "name": "vscode-ddev-phpstan",
   "displayName": "DDEV PHPStan",
   "description": "PHP static analysis with PHPStan in DDEV containers for VS Code",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "publisher": "OpenForgeProject",
   "license": "GPL-3.0",
   "icon": "assets/icon.png",
