@@ -21,7 +21,7 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import { afterEach, beforeEach } from 'mocha';
 import { DdevUtils } from '../shared/utils/ddev-utils';
-import * as fs from 'fs';
+
 
 suite('DdevUtils Test Suite', () => {
     let sandbox: sinon.SinonSandbox;
