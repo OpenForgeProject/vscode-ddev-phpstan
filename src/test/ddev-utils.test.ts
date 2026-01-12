@@ -21,7 +21,6 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 import { afterEach, beforeEach } from 'mocha';
 import { DdevUtils } from '../shared/utils/ddev-utils';
-import * as cp from 'child_process';
 import * as fs from 'fs';
 
 suite('DdevUtils Test Suite', () => {
