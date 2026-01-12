@@ -67,6 +67,18 @@ export class DdevUtils {
                 cwd: workspacePath,
                 encoding: 'utf-8'
             });
+            if (result.error) {
+                vscode.window.showErrorMessage(
+                    'Failed to execute "ddev". Please ensure DDEV is installed and available in your PATH.',
+                );
+                return false;
+            }
+            if (result.status === null) {
+                vscode.window.showErrorMessage(
+                    'The "ddev" command did not exit normally. Please check your DDEV installation.',
+                );
+                return false;
+            }
             return result.status === 0;
         } catch (error) {
             return false;
