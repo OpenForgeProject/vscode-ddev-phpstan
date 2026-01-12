@@ -70,12 +70,12 @@ export class PhpstanService extends BasePhpToolService {
                 command.push('-c', autoConfigPath);
             } else {
                 // Use individual settings when no config file is found
-                command.push(`--level=${this.config.level}`);
+                command.push('--level', String(this.config.level));
 
                 // Add exclude paths
                 if (this.config.excludePaths && this.config.excludePaths.length > 0) {
                     for (const excludePath of this.config.excludePaths) {
-                        command.push(`--exclude=${excludePath}`);
+                        command.push('--exclude', excludePath);
                     }
                 }
             }
