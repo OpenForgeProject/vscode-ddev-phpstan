@@ -79,16 +79,17 @@ src/
 
 ### Commits
 
-We follow conventional commits:
+We follow [Conventional Commits](https://www.conventionalcommits.org/) to automate our release process. We use `husky` and `commitlint` to enforce this standard locally.
 
-- `feat:` New features
-- `fix:` Bug fixes
-- `docs:` Documentation changes
-- `test:` Test additions/changes
-- `refactor:` Code refactoring
-- `chore:` Maintenance tasks
+Release Please assumes you are using Conventional Commit messages.
 
-Example: `feat: add auto-detection of PHPStan config files`
+The most important prefixes you should have in mind are:
+
+- `fix`: which represents bug fixes, and correlates to a SemVer patch.
+- `feat`: which represents a new feature, and correlates to a SemVer minor.
+- `feat!`: or `fix!:`, `refactor!:`, etc., which represent a breaking change (indicated by the `!`) and will result in a SemVer major.
+
+For a full list of types and rules, please visit [conventionalcommits.org](https://www.conventionalcommits.org/).
 
 ## Pull Request Process
 
