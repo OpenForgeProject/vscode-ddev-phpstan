@@ -57,11 +57,12 @@ This project is a VS Code extension that integrates PHPStan (Static Analysis) ru
     - Provide "Quick Fixes" or buttons in error messages for common actions (like "Start DDEV").
 
 5.  **Commit Messages**:
-    - STRICTLY follow Conventional Commits format: `type(scope): description`.
-    - Allowed types: `feat`, `fix`, `docs`, `test`, `refactor`, `chore`.
-    - Examples:
-      - `feat: add new setting`
-      - `fix: resolve crash`
+    - STRICTLY follow [Conventional Commits](https://www.conventionalcommits.org/) format: `type(scope): description`.
+    - Release Please assumes you are using Conventional Commit messages.
+    - Most important prefixes:
+      - `fix`: bug fixes (SemVer patch).
+      - `feat`: new features (SemVer minor).
+      - `feat!`, `fix!`, `refactor!`: breaking changes (SemVer major).
 
 ## Common Tasks
 
