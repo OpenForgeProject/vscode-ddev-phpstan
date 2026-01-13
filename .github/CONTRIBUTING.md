@@ -79,16 +79,20 @@ src/
 
 ### Commits
 
-We follow conventional commits:
+We follow [Conventional Commits](https://www.conventionalcommits.org/) to automate our release process. We use `husky` and `commitlint` to enforce this standard locally.
 
-- `feat:` New features
-- `fix:` Bug fixes
-- `docs:` Documentation changes
-- `test:` Test additions/changes
-- `refactor:` Code refactoring
-- `chore:` Maintenance tasks
+**Format**: `type(scope): description`
 
-Example: `feat: add auto-detection of PHPStan config files`
+- `feat`: New features (triggers a minor version bump)
+- `fix`: Bug fixes (triggers a patch version bump)
+- `docs`: Documentation changes
+- `test`: Test additions/changes
+- `refactor`: Code refactoring
+- `chore`: Maintenance tasks
+
+**Examples**:
+- `feat: add auto-detection of PHPStan config files`
+- `fix: resolve crash when parsing error output`
 
 ## Pull Request Process
 

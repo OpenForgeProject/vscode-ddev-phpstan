@@ -123,9 +123,12 @@
     "test": "npm run compile-tests && vscode-test",
     "lint": "eslint src --ext ts",
     "publish:vscode": "vsce publish",
-    "publish:ovsx": "ovsx publish"
+    "publish:ovsx": "ovsx publish",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
     "@types/mocha": "^10.0.9",
     "@types/node": "^25.x",
     "@types/vscode": "^1.108.1",
@@ -136,6 +139,7 @@
     "@vscode/vsce": "^3.0.0",
     "esbuild": "^0.27.2",
     "eslint": "^9.0.0",
+    "husky": "^9.1.7",
     "mocha": "^11.7.4",
     "ovsx": "^0.10.8",
     "sinon": "^21.0.1",
