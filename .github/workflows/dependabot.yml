@@ -27,8 +27,8 @@ jobs:
     if: github.actor == 'dependabot[bot]'
 
     steps:
-    - name: Auto-merge Dependabot PRs
-      uses: pascalgn/merge-action@v0.15.6
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        merge_method: squash
+    - name: Enable auto-merge for Dependabot PRs
+      run: gh pr merge --auto --squash "$PR_URL"
+      env:
+        PR_URL: ${{github.event.pull_request.html_url}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
