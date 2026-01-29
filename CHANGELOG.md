@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This project uses [Release Please](https://github.com/googleapis/release-please) to automate releases and changelog management.
 
+## [0.5.2](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.5.1...v0.5.2) (2026-01-29)
+
+
+### Bug Fixes
+
+* resolve npm audit vulnerabilities ([93e18cc](https://github.com/OpenForgeProject/vscode-ddev-phpstan/commit/93e18cce26c248c130234d62b77b35dc05f1eaf9))
+* trigger release for dependency updates ([cc20c59](https://github.com/OpenForgeProject/vscode-ddev-phpstan/commit/cc20c598c85b5f2e9e7203837d538aa47470c423))
+
 ## [0.5.1](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.4.2...v0.5.1) (2026-01-12)
 
 ### Features
