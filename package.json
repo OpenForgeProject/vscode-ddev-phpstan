@@ -128,7 +128,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.2",
-    "@commitlint/config-conventional": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.2",
     "@types/mocha": "^10.0.9",
     "@types/node": "^25.x",
     "@types/vscode": "^1.109.0",
