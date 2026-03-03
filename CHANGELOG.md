@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project uses [Release Please](https://github.com/googleapis/release-please) to automate releases and changelog management.
 
+## [0.6.0](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.5.2...v0.6.0) (2026-03-03)
+
+
+### Features
+
+* update README and changelog to reflect project abandonment ([d8616c7](https://github.com/OpenForgeProject/vscode-ddev-phpstan/commit/d8616c7a19d63ee2e0095732ba2cac3aff5d5de4))
+
 ## [0.6.0] (2026-03-03)
 
 ### Features
