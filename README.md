@@ -1,5 +1,9 @@
 # DDEV PHPStan Extension for VS Code
 
+> [!WARNING]
+> **This project is abandoned in favor of [Trunk Code Quality](https://marketplace.visualstudio.com/items?itemName=Trunk.io).**
+> No further development or maintenance will take place.
+
 This extension integrates [PHPStan](https://phpstan.org/) with Visual Studio Code using [DDEV](https://ddev.com/) as the runtime environment. It provides real-time static analysis for PHP projects running in DDEV containers.
 
 ## Features

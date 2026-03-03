@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project uses [Release Please](https://github.com/googleapis/release-please) to automate releases and changelog management.
 
+## [0.6.0] (2026-03-03)
+
+### Features
+
+* This project is abandoned in favor of [Trunk Code Quality](https://marketplace.visualstudio.com/items?itemName=Trunk.io)
+
 ## [0.5.2](https://github.com/OpenForgeProject/vscode-ddev-phpstan/compare/v0.5.1...v0.5.2) (2026-01-29)
 
 
